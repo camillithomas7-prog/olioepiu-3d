@@ -311,6 +311,82 @@ footer{background:var(--g3);color:rgba(243,238,227,.62);padding:90px 0 40px;font
 #fab .btn{box-shadow:0 20px 50px -14px rgba(11,26,18,.7)}
 
 @media(min-width:901px) and (max-width:1250px),(min-width:901px) and (max-height:640px){.fi-head p{display:none}.fi-head .h2{font-size:clamp(38px,4vw,60px)}}
+
+/* ===== MENU COMPLETO (popup) ===== */
+#fm{position:fixed;inset:0;z-index:150;pointer-events:none;visibility:hidden}
+#fm.is-open{pointer-events:auto;visibility:visible}
+.fm-bg{position:absolute;inset:0;background:rgba(6,14,9,.6);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);opacity:0;transition:opacity .7s var(--ease)}
+#fm.is-open .fm-bg{opacity:1}
+.fm-card{position:absolute;inset:18px;border-radius:6px;overflow:hidden;background:var(--cr);display:grid;grid-template-columns:330px 1fr;clip-path:inset(100% 0 0 0 round 6px);transition:clip-path 1s var(--ease);box-shadow:0 40px 120px -30px rgba(0,0,0,.6)}
+#fm.is-open .fm-card{clip-path:inset(0 0 0 0 round 6px)}
+.fm-side{background:var(--g2);color:var(--cr);display:flex;flex-direction:column;padding:34px 30px 28px;position:relative;overflow:hidden}
+.fm-side:before{content:"";position:absolute;inset:0;background:url(assets/img/p1.webp) center/cover;opacity:.08}
+.fm-side>*{position:relative}
+.fm-side img.lg{width:160px;margin-bottom:6px}
+.fm-side .loc{color:var(--gold2);margin-bottom:34px}
+.fm-nav{display:flex;flex-direction:column;gap:2px;flex:1;overflow:auto;margin:0 -10px;padding:0 10px}
+.fm-nav button{display:grid;grid-template-columns:34px 1fr auto;align-items:baseline;gap:8px;text-align:left;padding:11px 12px;border-radius:4px;color:rgba(243,238,227,.55);transition:all .4s var(--ease)}
+.fm-nav button .nn{font-family:var(--fm);font-size:11px;color:rgba(217,189,138,.55)}
+.fm-nav button .nt{font-family:var(--fs);font-size:25px;line-height:1.05}
+.fm-nav button .ns{font-family:var(--fm);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold2);opacity:.8}
+.fm-nav button:hover{color:var(--cr);background:rgba(243,238,227,.04)}
+.fm-nav button.on{color:var(--cr);background:rgba(243,238,227,.08)}
+.fm-nav button.on .nt{font-style:italic}
+.fm-foot{border-top:1px solid rgba(243,238,227,.12);padding-top:20px;margin-top:18px;font-size:13px;color:rgba(243,238,227,.6);display:grid;gap:14px}
+.fm-foot .btn{height:48px;width:100%}
+.fm-main{position:relative;overflow-y:auto;overscroll-behavior:contain;scroll-behavior:smooth}
+.fm-top{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 40px;background:rgba(243,238,227,.9);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(29,61,44,.1)}
+.fm-search{display:flex;align-items:center;gap:12px;flex:1;max-width:420px;border:1px solid rgba(29,61,44,.18);border-radius:999px;padding:0 18px;height:46px;background:#fff8}
+.fm-search input{flex:1;outline:none;font-size:15px}
+.fm-search svg{flex:none;opacity:.5}
+.fm-x{width:48px;height:48px;border-radius:50%;background:var(--g);color:var(--cr);display:grid;place-items:center;flex:none;transition:transform .6s var(--ease)}
+.fm-x:hover{transform:rotate(90deg)}
+.fm-x:before,.fm-x:after{content:"";position:absolute;width:18px;height:1.5px;background:currentColor;transform:rotate(45deg)}
+.fm-x:after{transform:rotate(-45deg)}
+.fm-x{position:relative}
+.fm-hero{position:relative;height:clamp(240px,34vh,380px);overflow:hidden}
+.fm-hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale(1.08);transition:transform 1.6s var(--ease)}
+.fm-hero.in img{transform:none}
+.fm-hero:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(11,26,18,.85),rgba(11,26,18,.1) 60%)}
+.fm-hero .t{position:absolute;left:48px;right:48px;bottom:34px;z-index:2;color:var(--cr);display:flex;align-items:flex-end;justify-content:space-between;gap:30px}
+.fm-hero h3{font-family:var(--fs);font-weight:500;font-size:clamp(54px,6vw,104px);line-height:.9;letter-spacing:-.02em}
+.fm-hero h3 i{font-style:italic;color:var(--gold2);font-weight:400}
+.fm-hero .sub{text-align:right;color:rgba(243,238,227,.8);font-size:14px;line-height:1.7}
+.fm-hero .sub b{display:block;font-family:var(--fm);font-weight:400;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold2)}
+.fm-body{padding:50px 48px 70px;columns:2;column-gap:64px;column-rule:1px solid rgba(29,61,44,.1)}
+.fm-sec{break-inside:avoid;margin-bottom:46px}
+.fm-sec h4{display:flex;align-items:center;gap:16px;font-family:var(--fs);font-style:italic;font-weight:500;font-size:34px;color:var(--g);line-height:1}
+.fm-sec h4:after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--gold),transparent)}
+.fm-sec .sn{font-family:var(--fm);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:10px 0 4px}
+.fm-it{padding:15px 0;border-bottom:1px dashed rgba(29,61,44,.14)}
+.fm-it:last-child{border-bottom:0}
+.fm-row{display:flex;align-items:baseline;gap:10px}
+.fm-row b{font-family:var(--fs);font-weight:600;font-size:19px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink)}
+.fm-row b sup{font-family:var(--fb);font-size:10px;color:var(--tom);margin-right:2px;letter-spacing:0}
+.fm-row i{flex:1;border-bottom:1px dotted rgba(29,61,44,.35);transform:translateY(-4px);min-width:20px}
+.fm-row em{font-style:normal;font-family:var(--fs);font-size:20px;font-weight:600;color:var(--g);white-space:nowrap}
+.fm-it p{color:var(--mu);font-size:14px;margin-top:3px;font-style:italic;font-family:var(--fs);font-size:17px;line-height:1.35}
+.fm-it.plain p{font-style:normal;font-family:var(--fb);font-size:14px;color:var(--ink)}
+.fm-txt{font-family:var(--fs);font-style:italic;font-size:19px;color:var(--mu)}
+.fm-note{column-span:all;margin-top:10px;padding-top:24px;border-top:1px solid rgba(29,61,44,.12);color:var(--mu);font-size:12.5px}
+.fm-empty{column-span:all;padding:60px 0;text-align:center;font-family:var(--fs);font-style:italic;font-size:28px;color:var(--mu)}
+.fm-hit{padding:2px 0}
+.fm-res h5{column-span:all;font-family:var(--fm);font-weight:400;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin:0 0 6px}
+mark{background:rgba(217,189,138,.45);color:inherit;border-radius:2px}
+.menu-open-btn{cursor:pointer}
+@media(max-width:900px){
+  .fm-card{inset:0;border-radius:0;grid-template-columns:1fr;grid-template-rows:auto 1fr}
+  .fm-side{padding:16px 16px 10px}
+  .fm-side img.lg,.fm-side .loc,.fm-foot{display:none}
+  .fm-nav{flex-direction:row;overflow-x:auto;gap:6px}
+  .fm-nav button{grid-template-columns:auto;padding:8px 12px;white-space:nowrap}
+  .fm-nav button .nn,.fm-nav button .ns{display:none}
+  .fm-nav button .nt{font-size:20px}
+  .fm-top{padding:12px 16px}
+  .fm-hero .t{left:20px;right:20px;flex-direction:column;align-items:flex-start}
+  .fm-hero .sub{text-align:left}
+  .fm-body{columns:1;padding:30px 20px 60px}
+}
 @media(max-width:1000px){.nlinks,.nr .tel{display:none}}
 @media(max-width:900px){
   #hero{height:320vh}
@@ -371,7 +447,7 @@ footer{background:var(--g3);color:rgba(243,238,227,.62);padding:90px 0 40px;font
       <span class="eyebrow h-in">Trattoria & Enoteca · Greenwich Village · Since 2010</span>
       <h1 class="h1"><span class="l"><span>A little Naples</span></span><span class="l"><span>on <i>Sixth & Greenwich.</i></span></span></h1>
       <p class="h-in">Handmade pasta, wood-fired pizza and an open patio wrapped in flowers, right across from the Jefferson Market Library.</p>
-      <div class="hero-cta h-in"><a class="btn btn-c" href="#reserve" data-go>Reserve a table <span class="ar"></span></a><a class="btn btn-o on-dark" href="#menu" data-go>See the menu</a></div>
+      <div class="hero-cta h-in"><a class="btn btn-c" href="#reserve" data-go>Reserve a table <span class="ar"></span></a><button class="btn btn-o on-dark menu-open-btn" data-menu="dinner">See the menu</button></div>
     </div>
     <div class="hchap" id="ch1"><span class="eyebrow">01 · The Patio</span><div class="big">Alfresco, <i>all year long.</i></div><p>An open patio surrounded by flowers and greenery, where Sixth Avenue, Greenwich Avenue and Christopher Street meet.</p></div>
     <div class="hchap" id="ch2"><span class="eyebrow">02 · The Room</span><div class="big">Rustic, warm, <i>alive.</i></div><p>74 seats, wooden beams, white tablecloths and the lively buzz of the neighborhood's favorite gathering place.</p></div>
@@ -490,7 +566,7 @@ footer{background:var(--g3);color:rgba(243,238,227,.62);padding:90px 0 40px;font
         <div class="cap"><b id="mvisN">Bruschetta Tricolore</b><span class="mono" id="mvisP">$19</span></div>
       </div>
     </div>
-    <div class="menu-foot"><span>Lunch prix fixe $29, Monday–Friday 11am–4pm · Weekend brunch · Menu items and prices may change.</span><a class="btn btn-o on-light" href="https://www.olioepiu.com/nyc-menu/" target="_blank" rel="noopener">Full menu <span class="ar"></span></a></div>
+    <div class="menu-foot"><span>Lunch prix fixe $29, Monday–Friday 11am–4pm · Weekend brunch · Menu items and prices may change.</span><button class="btn btn-g menu-open-btn" data-menu="dinner">View the full menu <span class="ar"></span></button></div>
   </div>
 </section>
 
@@ -623,12 +699,34 @@ footer{background:var(--g3);color:rgba(243,238,227,.62);padding:90px 0 40px;font
     <div class="ft">
       <div><img src="assets/logo-cream.png" alt="Olio e Più"><p>A modern trattoria bringing a piece of Old World Italy to Greenwich Village since 2010.</p><form class="nl" onsubmit="event.preventDefault();this.querySelector('button').textContent='Grazie!'"><input type="email" placeholder="Your email for news & events" required><button>Subscribe</button></form></div>
       <div><h6>Greenwich Village</h6><ul><li>3 Greenwich Avenue</li><li>New York, NY 10014</li><li><a href="tel:+12122436546">+1 (212) 243-6546</a></li><li><a href="mailto:contact@olioepiu.nyc">contact@olioepiu.nyc</a></li></ul></div>
-      <div><h6>Explore</h6><ul><li><a href="#menu" data-go>Menu</a></li><li><a href="#aperitivo" data-go>Aperitivo Hour</a></li><li><a href="https://www.olioepiu.com/events/" target="_blank" rel="noopener">Events</a></li><li><a href="https://www.instagram.com/olioepiu/" target="_blank" rel="noopener">Instagram</a></li></ul></div>
+      <div><h6>Explore</h6><ul><li><a href="#" class="menu-open-btn" data-menu="dinner">Full menu</a></li><li><a href="#" class="menu-open-btn" data-menu="wine">Wine list</a></li><li><a href="#aperitivo" data-go>Aperitivo Hour</a></li><li><a href="https://www.olioepiu.com/events/" target="_blank" rel="noopener">Events</a></li><li><a href="https://www.instagram.com/olioepiu/" target="_blank" rel="noopener">Instagram</a></li></ul></div>
       <div><h6>Our locations</h6><ul><li>NYC Greenwich Village</li><li>NYC Bryant Park</li><li>NYC East Village</li><li>Chicago</li><li>Washington, D.C.</li></ul></div>
     </div>
     <div class="fb"><span>© 2026 Olio e Più · Trattoria & Enoteca</span><span>Consuming raw or undercooked meats, poultry, seafood, shellfish, or eggs may increase your risk of foodborne illness.</span></div>
   </div>
 </footer>
+
+
+<!-- ============ MENU COMPLETO ============ -->
+<div id="fm" aria-hidden="true" role="dialog" aria-label="Full menu">
+  <div class="fm-bg" data-close></div>
+  <div class="fm-card">
+    <aside class="fm-side">
+      <img class="lg" src="assets/logo-cream.png" alt="Olio e Più">
+      <span class="mono loc">Greenwich Village · Menus</span>
+      <nav class="fm-nav" id="fmNav"></nav>
+      <div class="fm-foot"><span>Kitchen open daily · 3 Greenwich Ave</span><a class="btn btn-c" href="#reserve" data-close data-go>Reserve a table <span class="ar"></span></a></div>
+    </aside>
+    <div class="fm-main" id="fmMain" data-lenis-prevent>
+      <div class="fm-top">
+        <label class="fm-search"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input id="fmQ" type="search" placeholder="Search dishes, wines, cocktails…" autocomplete="off"></label>
+        <button class="fm-x" data-close aria-label="Close menu"></button>
+      </div>
+      <div class="fm-hero" id="fmHero"><img alt=""><div class="t"><h3></h3><div class="sub"></div></div></div>
+      <div class="fm-body" id="fmBody"></div>
+    </div>
+  </div>
+</div>
 
 <div id="fab"><a class="btn btn-g" href="#reserve" data-go>Reserve a table <span class="ar"></span></a></div>
 
@@ -636,6 +734,7 @@ footer{background:var(--g3);color:rgba(243,238,227,.62);padding:90px 0 40px;font
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
 <script src="assets/frames.js"></script>
+<script src="assets/menu.js"></script>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
 <script type="module" src="main.js"></script>
 </body>

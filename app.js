@@ -22,7 +22,7 @@
   $$("[data-go]").forEach(function (a) {
     a.addEventListener("click", function (e) {
       var id = a.getAttribute("href"); if (!id || id.charAt(0) !== "#") return;
-      var el = $(id); if (!el) return; e.preventDefault();
+      var el = $(id); if (!el) return; e.preventDefault(); if (window.__closeMenu) window.__closeMenu();
       var y = id === "#hero" ? 0 : el.getBoundingClientRect().top + scrollY - (id === "#room" || id === "#firma" ? 0 : 20);
       if (lenis) lenis.scrollTo(y, { duration: 1.8 }); else scrollTo({ top: y, behavior: "smooth" });
     });
@@ -272,7 +272,74 @@
     dt.value = iso(now); dt.min = iso(now);
     $("#rform").addEventListener("submit", function (e) {
       e.preventDefault();
-      window.open("https://resy.com/cities/new-york-ny/venues/olio-e-piu?date=" + dt.value + "&seats=" + $("#rSeats").value, "_blank", "noopener");
+      window.open("https://www.opentable.com/olio-e-piu?covers=" + $("#rSeats").value + "&dateTime=" + dt.value + "T" + ts.value, "_blank", "noopener");
     });
+  })();
+
+  /* ============ MENU COMPLETO (popup) ============ */
+  (function () {
+    var M = window.MENU || [], fm = $("#fm"), nav = $("#fmNav"), body = $("#fmBody"), hero = $("#fmHero"), main = $("#fmMain"), q = $("#fmQ"), cur = null, lastFocus = null;
+    var IMG = { "negroni-week": "p2", lunch: "burrata", "nyc-lunch-prix-fixe": "bruschetta", dinner: "carb", brunch: "p4", "nyc-dessert": "tiramisu", "happy-hour-aperitivo-hour-nyc-olio": "p2", "drinks-nyc": "p8", wine: "p8" };
+    var SHORT = { "negroni-week": "Negroni Week", lunch: "Lunch", "nyc-lunch-prix-fixe": "Prix Fixe", dinner: "Dinner", brunch: "Brunch", "nyc-dessert": "Desserts", "happy-hour-aperitivo-hour-nyc-olio": "Aperitivo", "drinks-nyc": "Drinks", wine: "Wine" };
+    var TAG = { "negroni-week": "Sep 20–27", "nyc-lunch-prix-fixe": "$29", "happy-hour-aperitivo-hour-nyc-olio": "2–6pm", brunch: "Weekends" };
+    var SUB = { "nyc-dessert": ["By Executive Pastry Chef", "Jean-Baptiste Scordel and team"], dinner: ["Handmade pasta · wood-fired pizza", "Prime meats & fresh seafood"], lunch: ["Monday – Friday", "Italian classics at midday"], "drinks-nyc": ["Signature & barrel-aged cocktails", "Spirits, amari & grappa"], wine: ["An Italian cellar", "By the glass (GL) or bottle (BTL)"] };
+    var NOTE = "*These items are served raw, undercooked or cooked to order. Consuming raw or undercooked meats, poultry, seafood, shellfish, or eggs may increase your risk of foodborne illness.";
+    function esc(t) { return String(t).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+    function mark(t, re) { t = esc(t); return re ? t.replace(re, "<mark>$1</mark>") : t; }
+    function nm(t, re) { var star = /^\*/.test(t); t = t.replace(/^\*/, ""); return (star ? "<sup>*</sup>" : "") + mark(t, re); }
+    function item(it, re) {
+      if (!it.n) return '<div class="fm-it plain"><p>' + mark(it.d, re).replace(/^\*/, "<sup style='color:var(--tom)'>*</sup>") + "</p></div>";
+      return '<div class="fm-it"><div class="fm-row"><b>' + nm(it.n, re) + "</b>" + (it.p ? "<i></i><em>" + esc(it.p) + "</em>" : "") + "</div>" + (it.d ? "<p>" + mark(it.d, re) + "</p>" : "") + "</div>";
+    }
+    function sec(s, re) {
+      if (!s.items.length) { if (!s.txt || /served raw/i.test(s.txt)) return ""; return '<div class="fm-sec">' + (s.h ? "<h4>" + esc(cap(s.h)) + "</h4>" : "") + '<p class="fm-txt">' + esc(s.note || s.txt) + "</p></div>"; }
+      return '<div class="fm-sec">' + (s.h ? "<h4>" + esc(cap(s.h)) + "</h4>" : "") + (s.note ? '<p class="sn">' + esc(s.note) + "</p>" : "") + s.items.map(function (i) { return item(i, re); }).join("") + "</div>";
+    }
+    function cap(t) { return t === t.toUpperCase() ? t.toLowerCase().replace(/(^|[\s&/])(\S)/g, function (a, b, c) { return b + c.toUpperCase(); }) : t; }
+    M.forEach(function (m, i) {
+      var b = document.createElement("button"); b.dataset.id = m.id;
+      b.innerHTML = '<span class="nn">' + ("0" + (i + 1)).slice(-2) + '</span><span class="nt">' + SHORT[m.id] + "</span>" + (TAG[m.id] ? '<span class="ns">' + TAG[m.id] + "</span>" : "<span></span>");
+      b.addEventListener("click", function () { q.value = ""; show(m.id); });
+      nav.appendChild(b);
+    });
+    function show(id) {
+      var m = M.filter(function (x) { return x.id === id; })[0] || M[0]; cur = m.id;
+      $$("button", nav).forEach(function (b) { b.classList.toggle("on", b.dataset.id === m.id); }); var on = $("button.on", nav); if (on && MOB) nav.scrollTo({ left: on.offsetLeft - 16, behavior: "smooth" });
+      var im = $("img", hero); hero.classList.remove("in"); im.src = "assets/img/" + (IMG[m.id] || "p1") + ".webp"; im.onload = function () { requestAnimationFrame(function () { hero.classList.add("in"); }); };
+      var words = (SHORT[m.id] || m.title).split(" "), last = words.pop();
+      $("h3", hero).innerHTML = (words.length ? esc(words.join(" ")) + " " : "") + "<i>" + esc(last) + "</i>";
+      var sub = SUB[m.id] || m.sub; $(".sub", hero).innerHTML = sub.length ? "<b>Greenwich Village</b>" + sub.map(esc).join("<br>") : "<b>Greenwich Village</b>";
+      var hasRaw = JSON.stringify(m).indexOf('"*') >= 0 || /\*/.test(JSON.stringify(m.secs));
+      body.innerHTML = m.secs.map(function (s) { return sec(s); }).join("") + (hasRaw ? '<p class="fm-note">' + NOTE + "</p>" : "");
+      main.scrollTop = 0; animate();
+    }
+    function animate() { if (HAS_GSAP && !RED) gsap.fromTo($$(".fm-sec,.fm-res h5", body), { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.9, ease: "expo.out", stagger: 0.035, delay: 0.1 }); }
+    q.addEventListener("input", function () {
+      var v = q.value.trim(); if (v.length < 2) { show(cur); return; }
+      var re = new RegExp("(" + v.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")", "ig"), html = "", n = 0;
+      M.forEach(function (m) {
+        var hits = [];
+        m.secs.forEach(function (s) { s.items.forEach(function (it) { re.lastIndex = 0; if (re.test(it.n + " " + it.d)) { re.lastIndex = 0; hits.push(item(it, re)); } }); });
+        if (hits.length) { n += hits.length; html += '<div class="fm-sec fm-res"><h4>' + esc(SHORT[m.id]) + "</h4>" + hits.join("") + "</div>"; }
+      });
+      $$("button", nav).forEach(function (b) { b.classList.remove("on"); });
+      $("h3", hero).innerHTML = "“" + esc(v) + "”"; $(".sub", hero).innerHTML = "<b>Search</b>" + n + (n === 1 ? " result" : " results") + " across all menus";
+      body.innerHTML = html || '<p class="fm-empty">Nothing found — try “pasta”, “truffle” or “Barolo”.</p>';
+      main.scrollTop = 0;
+    });
+    function open(id) {
+      lastFocus = document.activeElement; show(id || "dinner"); fm.classList.add("is-open"); fm.setAttribute("aria-hidden", "false");
+      if (lenis) lenis.stop(); document.documentElement.style.overflow = "hidden";
+      setTimeout(function () { $(".fm-x", fm).focus({ preventScroll: true }); }, 400);
+    }
+    function close() {
+      if (!fm.classList.contains("is-open")) return;
+      fm.classList.remove("is-open"); fm.setAttribute("aria-hidden", "true"); document.documentElement.style.overflow = ""; if (lenis) lenis.start();
+      if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
+    }
+    window.__closeMenu = close;
+    $$(".menu-open-btn").forEach(function (b) { b.addEventListener("click", function (e) { e.preventDefault(); open(b.dataset.menu); }); });
+    $$("[data-close]", fm).forEach(function (b) { if (!b.hasAttribute("data-go")) b.addEventListener("click", close); });
+    addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
   })();
 })();
