@@ -15,7 +15,7 @@
   /* ============ SMOOTH SCROLL ============ */
   var lenis = null;
   if (window.Lenis && !RED && !MOB) {
-    lenis = new Lenis({ duration: 1.2, easing: function (t) { return Math.min(1, 1.001 - Math.pow(2, -10 * t)); }, smoothWheel: true });
+    lenis = new Lenis({ duration: 1.0, easing: function (t) { return Math.min(1, 1.001 - Math.pow(2, -10 * t)); }, smoothWheel: true });
     if (HAS_GSAP) { lenis.on("scroll", ScrollTrigger.update); gsap.ticker.add(function (t) { lenis.raf(t * 1000); }); gsap.ticker.lagSmoothing(0); }
     lenis.stop();
   }
@@ -95,18 +95,18 @@
     var st = p < 0.14 ? 0 : p < 0.48 ? 1 : p < 0.84 ? 2 : 3; dots.forEach(function (d, i) { d.classList.toggle("on", i === st); });
   }
   heroScroll(0);
-  if (HAS_GSAP) ScrollTrigger.create({ trigger: "#hero", start: "top top", end: "bottom bottom", scrub: MOB ? true : 0.4, onUpdate: function (s) { heroScroll(s.progress); } });
+  if (HAS_GSAP) ScrollTrigger.create({ trigger: "#hero", start: "top top", end: "bottom bottom", scrub: true, onUpdate: function (s) { heroScroll(s.progress); } });
 
   /* ============ CARBONARA A 360° ============ */
   (function () {
     var turn = 0, prog = 0, ings = $$(".ing"), drag = $("#fiDrag"), cv = $("#plate");
     function draw() { plate.draw(prog * (plate.N - 1) + turn); }
     function set(p) {
-      prog = p; plate.zoom = 0.9 + Math.min(p, 0.5) * 0.12; draw();
+      prog = p; plate.zoom = 0.9 + Math.min(p, 0.5) * 0.12; draw(); document.getElementById("firma").style.setProperty("--R", (cv.clientHeight * 0.9 * plate.zoom * 0.37) + "px");
       ings.forEach(function (el, i) { var o = win(p, 0.14 + i * 0.1, 0.96, 0.06); el.style.opacity = o; el.style.transform = "translateX(" + ((1 - o) * (el.classList.contains("r") ? 30 : -30)) + "px)"; });
     }
     set(0);
-    if (HAS_GSAP) ScrollTrigger.create({ trigger: "#firma", start: "top top", end: "bottom bottom", scrub: 0.5, onUpdate: function (s) { set(s.progress); } });
+    if (HAS_GSAP) ScrollTrigger.create({ trigger: "#firma", start: "top top", end: "bottom bottom", scrub: true, onUpdate: function (s) { set(s.progress); } });
     var dn = false, lx = 0, acc = 0;
     cv.addEventListener("pointerdown", function (e) { dn = true; lx = e.clientX; cv.setPointerCapture(e.pointerId); drag.style.opacity = 0; });
     cv.addEventListener("pointermove", function (e) { if (!dn) return; acc += e.clientX - lx; lx = e.clientX; var st = Math.round(acc / 5); if (st) { turn += st; acc -= st * 5; draw(); } });
@@ -186,7 +186,7 @@
   (function () {
     if (!HAS_GSAP || MOB) return;
     var tr = $("#rmTrack"), ims = $$(".rc img", tr);
-    ScrollTrigger.create({ trigger: "#room", start: "top top", end: "bottom bottom", scrub: 0.8, invalidateOnRefresh: true, onUpdate: function (s) {
+    ScrollTrigger.create({ trigger: "#room", start: "top top", end: "bottom bottom", scrub: true, invalidateOnRefresh: true, onUpdate: function (s) {
       tr.style.transform = "translate3d(" + (-s.progress * (tr.scrollWidth - innerWidth)) + "px,0,0)";
       ims.forEach(function (im, i) { im.style.transform = "scale(1.12) translateX(" + ((s.progress - i / ims.length) * -60) + "px)"; });
     } });
