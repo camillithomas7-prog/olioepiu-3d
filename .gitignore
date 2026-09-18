@@ -1,3 +1,4 @@
 gen/
 src/
 .DS_Store
+shot.py

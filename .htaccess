@@ -1,0 +1,25 @@
+# Olio e Più — cache e compressione (Hostinger / Apache)
+Options -Indexes
+DirectoryIndex index.html
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript text/javascript application/json image/svg+xml
+</IfModule>
+
+<IfModule mod_mime.c>
+  AddType image/webp .webp
+  AddType model/gltf-binary .glb
+  AddType video/mp4 .mp4
+</IfModule>
+
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/webp "access plus 30 days"
+  ExpiresByType image/png "access plus 30 days"
+  ExpiresByType image/svg+xml "access plus 30 days"
+  ExpiresByType video/mp4 "access plus 30 days"
+  ExpiresByType model/gltf-binary "access plus 30 days"
+  ExpiresByType application/javascript "access plus 1 day"
+  ExpiresByType text/css "access plus 1 day"
+  ExpiresByType text/html "access plus 0 seconds"
+</IfModule>
